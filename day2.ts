@@ -1,7 +1,5 @@
 import * as fs from 'fs';
 
-const dialSteps = 100;
-
 export function part1(filename: string): number {
     const ranges = parseInput(filename);
 
