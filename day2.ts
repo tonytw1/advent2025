@@ -43,10 +43,10 @@ export function part2(filename: string): number {
                     break
                 }
                 if (s + l == asString.length) {
+                    // Reaching the end means the sequence completed.
                     return true;
                 }
             }
-
         }
         return false;
     }
@@ -60,10 +60,7 @@ export function part2(filename: string): number {
                 invalidTotal += n;
             }
         }
-
     }
-
-
     return invalidTotal;
 }
 
