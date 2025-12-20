@@ -42,7 +42,7 @@ export function part2(filename: string): Number {
         var canDiscard = battery.length - desiredBatterySize
 
         var i = 0
-        while (i < battery.length) {
+        while (i < battery.length && result.length < desiredBatterySize) {
             // Find the higest digit reachable with the allowed discards
             var slice = battery.slice(i, i + canDiscard + 1);
             const allTheSame = slice.every(v => v === slice[0]);
@@ -69,7 +69,7 @@ export function part2(filename: string): Number {
             }
         }
 
-        return result.slice(0, desiredBatterySize)
+        return result
     }
 
     var total = 0
