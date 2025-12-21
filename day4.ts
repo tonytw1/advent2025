@@ -27,7 +27,7 @@ export function part2(filename: string): Number {
 function accessibleFrom(map: string[], removed: Set<string>): number[][] {
 
     function isRemoved(x: number, y: number): boolean {
-       const key = x + "," + y;  // TODO number tuples not working with Set?
+       const key = x + "," + y;  // TODO number tuples not working with Set because compare is by reference not value
     return  removed.has(key);
     }
 
