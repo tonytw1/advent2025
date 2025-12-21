@@ -2,7 +2,7 @@ import * as fs from 'fs';
 
 export function part1(filename: string): Number {
     const map = parseInput(filename)
-    return accessibleFrom(map, new Set<string>()).length;
+    return accessibleFrom(map).length;
 }
 
 export function part2(filename: string): Number {
@@ -24,11 +24,11 @@ export function part2(filename: string): Number {
 }
 
 
-function accessibleFrom(map: string[], removed: Set<string>): number[][] {
+function accessibleFrom(map: string[], removed: Set<string> = new Set()): number[][] {
 
     function isRemoved(x: number, y: number): boolean {
-       const key = x + "," + y;  // TODO number tuples not working with Set because compare is by reference not value
-    return  removed.has(key);
+        const key = x + "," + y;  // TODO number tuples not working with Set because compare is by reference not value
+        return removed.has(key);
     }
 
 
@@ -42,10 +42,10 @@ function accessibleFrom(map: string[], removed: Set<string>): number[][] {
                 continue
             }
             // Ignore previously removed
-            if (isRemoved(x, y)) {              
+            if (isRemoved(x, y)) {
                 continue
             }
-            
+
             // Count neighbours
             var neighbours = 0;
             for (let sy = y - 1; sy <= y + 1; sy += 1) {
