@@ -25,6 +25,13 @@ export function part2(filename: string): Number {
 
 
 function accessibleFrom(map: string[], removed: Set<string>): number[][] {
+
+    function isRemoved(x: number, y: number): boolean {
+       const key = x + "," + y;  // TODO number tuples not working with Set?
+    return  removed.has(key);
+    }
+
+
     const width = map[0].length;
     const height = map.length;
     var accessible: number[][] = [];
@@ -35,10 +42,10 @@ function accessibleFrom(map: string[], removed: Set<string>): number[][] {
                 continue
             }
             // Ignore previously removed
-            if (removed.has(x + "," + y)) {  // TODO Set identity not working             
+            if (isRemoved(x, y)) {              
                 continue
             }
-
+            
             // Count neighbours
             var neighbours = 0;
             for (let sy = y - 1; sy <= y + 1; sy += 1) {
@@ -53,9 +60,7 @@ function accessibleFrom(map: string[], removed: Set<string>): number[][] {
                     }
 
                     if (map[sy].charAt(sx) == '@') {
-                        const key = sx + "," + sy;  // TODO number tuples not working with Set?
-                        const isRemoved = removed.has(key);
-                        if (!isRemoved) {
+                        if (!isRemoved(sx, sy)) {
                             neighbours++;
                         }
                     }
