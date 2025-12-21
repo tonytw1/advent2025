@@ -59,10 +59,8 @@ function accessibleFrom(map: string[], removed: Set<string> = new Set()): number
                         continue;
                     }
 
-                    if (map[sy].charAt(sx) == '@') {
-                        if (!isRemoved(sx, sy)) {
-                            neighbours++;
-                        }
+                    if (map[sy].charAt(sx) == '@' && !isRemoved(sx, sy)) {
+                        neighbours++;
                     }
                 }
             }
