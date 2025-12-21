@@ -2,12 +2,10 @@ import * as fs from 'fs';
 
 export function part1(filename: string): number {
     const batteries = parseInput(filename);
-
     var total = 0;
     for (const battery of batteries) {
         total += joltageOf(bestArrangement(battery, 2))
     }
-
     return total;
 }
 
