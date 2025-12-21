@@ -2,14 +2,40 @@ import * as fs from 'fs';
 
 export function part1(filename: string): Number {
     const map = parseInput(filename)
-    const width = map[0].length
-    const height = map.length
+    return accessibleFrom(map, new Set<string>()).length;
+}
 
-    var accessible = 0
+export function part2(filename: string): Number {
+    const map = parseInput(filename)
+
+    // Rather than mutate the input, keep a record of known removed rolls
+    var removedRolls = new Set<string>()
+    var accessibleRolls: number[][] = accessibleFrom(map, removedRolls);
+    while (accessibleRolls.length > 0) {
+        // Remove the accessible rolls and them re-evaluate
+        for (let i = 0; i < accessibleRolls.length; i++) {
+            const roll = accessibleRolls[i]
+            removedRolls.add(roll[0] + "," + roll[1])
+        }
+        accessibleRolls = accessibleFrom(map, removedRolls)
+    }
+
+    return removedRolls.size
+}
+
+
+function accessibleFrom(map: string[], removed: Set<string>): number[][] {
+    const width = map[0].length;
+    const height = map.length;
+    var accessible: number[][] = [];
     // Visit every node of the map
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
             if (map[y].charAt(x) != '@') {
+                continue
+            }
+            // Ignore previously removed
+            if (removed.has(x + "," + y)) {  // TODO Set identity not working             
                 continue
             }
 
@@ -19,21 +45,26 @@ export function part1(filename: string): Number {
                 for (let sx = x - 1; sx <= x + 1; sx += 1) {
                     // Ignore out of bounds 
                     if (sx < 0 || sx == width || sy < 0 || sy == height) {
-                        continue
+                        continue;
                     }
                     // Don't count ourselves
                     if (sx == x && sy == y) {
-                        continue
+                        continue;
                     }
 
                     if (map[sy].charAt(sx) == '@') {
-                        neighbours++
+                        const key = sx + "," + sy;  // TODO number tuples not working with Set?
+                        const isRemoved = removed.has(key);
+                        if (!isRemoved) {
+                            neighbours++;
+                        }
                     }
                 }
             }
 
             if (neighbours < 4) {
-                accessible++
+                accessible.push([x, y]);
+
             }
 
         }
