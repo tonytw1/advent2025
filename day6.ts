@@ -7,28 +7,35 @@ export function part1(filename: string): number {
     var total = 0
     // Foreach column calculate the result
     for (let c = 0; c < input[0].length; c++) {
-        var columnValue = 0;
-        const operator = input[input.length - 1][c]
-        if (operator == '*') {
-            columnValue = 1
-        }
-
+        const numbers: number[] = []
+        // Extract the numbes which are in normal left-to-right format
         for (let r = 0; r < input.length - 1; r++) {
-            const n = Number.parseInt(input[r][c])
-            if (operator == '*') {
-                columnValue *= n
-            } else {
-                columnValue += n
-
-            }
+            numbers.push(Number.parseInt(input[r][c]))
         }
+        // and the operator
+        const operator = input[input.length - 1][c]
 
-        total += columnValue
+        total += valueOfColumn(operator, numbers)
     }
 
     return total
 }
 
+function valueOfColumn(operator: string, numbers: number[]) {
+    var columnValue = 0;
+    if (operator == '*') {
+        columnValue = 1;
+    }
+
+    for (const number of numbers) {
+        if (operator == '*') {
+            columnValue *= number;
+        } else {
+            columnValue += number;
+        }
+    }
+    return columnValue;
+}
 
 function parseInput(filename: string) {
     // Read each line spliting by white space
