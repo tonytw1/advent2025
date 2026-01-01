@@ -9,7 +9,6 @@ export function part1(filename: string): number {
     var totalSplits = 0
     for (const line of splitters) {
         // Compose the next set of beams based in this line's interaction with the current beams
-        console.log(beams)
         const nextBeams = new Set<number>()
         for (const beam of beams) {
             if (line.has(beam)) {
