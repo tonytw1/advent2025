@@ -9,7 +9,7 @@ export function part1(filename: string): number {
     return total;
 }
 
-export function part2(filename: string): Number {
+export function part2(filename: string): number {
     const batteries = parseInput(filename);
     var total = 0
     for (const battery of batteries) {
