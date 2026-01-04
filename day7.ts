@@ -34,19 +34,32 @@ export function part1(filename: string): number {
 export function part2(filename: string): number {
     const [s, splitters] = parseInput(filename)
 
+    const cache = new Map();
+
     function quantumTachyonPaths(s: number, d: number): number {
         // If we have reached the end of the depth then we can return 1 so indicate a possible path
         if (d == splitters.length) {
             return 1
         }
 
+        // There is going to be an enormous about of rework over the lower layers
+        // so we can spend memory on a cache to prevent rework of previously completed nodes
+        const key = d + "-" + s
+        if (cache.has(key)) {
+            return cache.get(key)
+        }
+
         const line = splitters[d]
         // If have not hit a splitter then we can recurse straight down in to the next layer
         if (!line.has(s)) {
+            const countFromThisNode = quantumTachyonPaths(s, d + 1)
+            cache.set(key, countFromThisNode)
             return quantumTachyonPaths(s, d + 1)
         } else {
             // Otherwise split and recurse into and count both paths
-            return quantumTachyonPaths(s - 1, d + 1) + quantumTachyonPaths(s + 1, d + 1)
+            const countFromThisNode = quantumTachyonPaths(s - 1, d + 1) + quantumTachyonPaths(s + 1, d + 1)
+            cache.set(key, countFromThisNode)
+            return countFromThisNode
         }
     }
 
