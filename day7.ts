@@ -3,28 +3,54 @@ import * as fs from 'fs';
 export function part1(filename: string): number {
     const [s, splitters] = parseInput(filename)
 
-    var beams = new Set<number>()
-    beams.add(s)
+    function splittingTachyonBeamCount(s: number) {
+        var beams = new Set<number>();
+        beams.add(s);
 
-    var totalSplits = 0
-    for (const line of splitters) {
-        // Compose the next set of beams based in this line's interaction with the current beams
-        const nextBeams = new Set<number>()
-        for (const beam of beams) {
-            if (line.has(beam)) {
-                // Split
-                nextBeams.add(beam - 1)
-                nextBeams.add(beam + 1)
-                totalSplits++
-            } else {
-                // This beam drops through
-                nextBeams.add(beam)
+        var totalSplits = 0;
+        for (const line of splitters) {
+            // Compose the next set of beams based in this line's interaction with the current beams
+            const nextBeams = new Set<number>();
+            for (const beam of beams) {
+                if (line.has(beam)) {
+                    // Split
+                    nextBeams.add(beam - 1);
+                    nextBeams.add(beam + 1);
+                    totalSplits++;
+                } else {
+                    // This beam drops through
+                    nextBeams.add(beam);
+                }
             }
+            beams = nextBeams;
         }
-        beams = nextBeams
+
+        return totalSplits;
     }
 
-    return totalSplits
+    return splittingTachyonBeamCount(s);
+}
+
+export function part2(filename: string): number {
+    const [s, splitters] = parseInput(filename)
+
+    function quantumTachyonPaths(s: number, d: number): number {
+        // If we have reached the end of the depth then we can return 1 so indicate a possible path
+        if (d == splitters.length) {
+            return 1
+        }
+
+        const line = splitters[d]
+        // If have not hit a splitter then we can recurse straight down in to the next layer
+        if (!line.has(s)) {
+            return quantumTachyonPaths(s, d + 1)
+        } else {
+            // Otherwise split and recurse into and count both paths
+            return quantumTachyonPaths(s - 1, d + 1) + quantumTachyonPaths(s + 1, d + 1)
+        }
+    }
+
+    return quantumTachyonPaths(s, 0)
 }
 
 function parseInput(filename: string): [number, Set<number>[]] {
