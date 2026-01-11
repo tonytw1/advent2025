@@ -1,8 +1,9 @@
+import { kMaxLength } from 'buffer';
 import * as fs from 'fs';
 
 export function part1(filename: string, circuitsNeeded: number): number {
     const points = parseInput(filename);
-    const connectedRegions = assemble(points, circuitsNeeded);
+    const connectedRegions = assemble(points, circuitsNeeded)[0]
 
     // Sum the sizes of each connected region
     const connectedRegionSizes: Map<number, number> = new Map();
@@ -23,8 +24,18 @@ export function part1(filename: string, circuitsNeeded: number): number {
     return total;
 }
 
+export function part2(filename: string): number {
+    const points = parseInput(filename);
 
-function assemble(points: [number, number, number][], maxCircuits: number): Map<string, number> {
+    const [connectedRegions, point1, point2] = assemble(points, Number.MAX_VALUE)
+
+    const x1 = point1.split(",").map(Number)[0]
+    const x2 = point2.split(",").map(Number)[0]
+    return x1 * x2;
+}
+
+
+function assemble(points: [number, number, number][], maxCircuits: number): [Map<string, number>, string, string] {
 
     // Need a function to measure the distance between two points
     function distance(p1: [number, number, number], p2: [number, number, number]): number {
@@ -54,6 +65,9 @@ function assemble(points: [number, number, number][], maxCircuits: number): Map<
     let i = 0;
     let nextRegionId = 1;
     const connectedRegions: Map<string, number> = new Map();
+    
+
+    console.log(sortedKeys)
     for (const key of sortedKeys) {
 
         const [point1, point2] = key.split("-");
@@ -84,11 +98,17 @@ function assemble(points: [number, number, number][], maxCircuits: number): Map<
         }
 
         i++;
+        // Return if we've reached the max circuits needed
         if (i >= maxCircuits) {
-            break;
+            return [connectedRegions, point1, point2]
+        }
+        // Or if we've created a a single connected region containing all the points
+        const uniqueRegions = new Set<number>(connectedRegions.values());
+        if (uniqueRegions.size == 1 && connectedRegions.size == points.length) {
+            return [connectedRegions, point1, point2]
         }
     }
-    return connectedRegions
+    return [connectedRegions, undefined!, undefined!]
 }
 
 function parseInput(filename: string): [number, number, number][] {
