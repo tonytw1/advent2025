@@ -1,4 +1,3 @@
-import { kMaxLength } from 'buffer';
 import * as fs from 'fs';
 
 export function part1(filename: string, circuitsNeeded: number): number {
@@ -65,9 +64,8 @@ function assemble(points: [number, number, number][], maxCircuits: number): [Map
     let i = 0;
     let nextRegionId = 1;
     const connectedRegions: Map<string, number> = new Map();
-    
 
-    console.log(sortedKeys)
+
     for (const key of sortedKeys) {
 
         const [point1, point2] = key.split("-");
