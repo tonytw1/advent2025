@@ -1,4 +1,4 @@
-import { part1, part2} from './day8';
+import { part1, part2 } from './day8';
 
 test('day8 part 1', () => {
   expect(part1('day8-example.txt', 10)).toBe(40);
